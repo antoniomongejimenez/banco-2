@@ -24,6 +24,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($movimientos as $movimiento)
+
                                     <tr>
                                         <td class="px-6 py-2">{{ $movimiento->fecha }}</td>
                                         <td class="px-6 py-2">{{ $movimiento->concepto }}</td>
@@ -32,6 +33,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <a href="">Saldo: {{$saldo}}</a>
                     </x-plantilla>
                 </div>
             </div>

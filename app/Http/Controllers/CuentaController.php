@@ -133,10 +133,12 @@ class CuentaController extends Controller
 
     public function movimientos(Cuenta $cuenta)
     {
+        $saldo = $cuenta->with('movimientos')->withSum('movimientos', 'importa')->find($cuenta->id)->movimientos_sum_importa;
         $movimientos = $cuenta->movimientos;
 
         return view('cuentas.movimientos', [
             'movimientos' => $movimientos,
+            'saldo' => $saldo,
             'cuenta' => $cuenta,
         ]);
     }
