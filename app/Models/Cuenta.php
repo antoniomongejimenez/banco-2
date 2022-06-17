@@ -9,9 +9,13 @@ class Cuenta extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'numero',
+    ];
+
     public function clientes()
     {
-        return $this->belongsToMany(Cliente::class);
+        return $this->belongsToMany(Cliente::class, 'titulares');
     }
 
     public function movimientos()

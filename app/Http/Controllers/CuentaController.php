@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCuentaRequest;
 use App\Http\Requests\UpdateCuentaRequest;
+use App\Models\Cliente;
 use App\Models\Cuenta;
+use Illuminate\Http\Request;
 
 class CuentaController extends Controller
 {
@@ -93,5 +95,49 @@ class CuentaController extends Controller
     public function destroy(Cuenta $cuenta)
     {
         //
+    }
+
+    public function titular(Cuenta $cuenta)
+    {
+        $clientes = $cuenta->clientes()->get();
+
+        return view('cuentas.titulares', [
+            'cuenta' => $cuenta,
+            'clientes' => $clientes,
+        ]);
+    }
+
+    public function addtitular(Cuenta $cuenta)
+    {
+        $clientes = Cliente::all()->diff($cuenta->clientes);
+
+        return view('cuentas.addtitular', [
+            'cuenta' => $cuenta,
+            'clientes' => $clientes,
+        ]);
+    }
+
+    public function addtitularmeter(Request $request, Cuenta $cuenta)
+    {
+        $cuenta->clientes()->attach($request->cliente);
+
+        return redirect()->route('cuentas.index', $cuenta);
+    }
+
+    public function quitartitular(Cuenta $cuenta, Cliente $cliente)
+    {
+        $cuenta->clientes()->detach($cliente);
+
+        return redirect()->route('cuentas.titulares', $cuenta)->with('success', 'Titular quitado con exito.');
+    }
+
+    public function movimientos(Cuenta $cuenta)
+    {
+        $movimientos = $cuenta->movimientos;
+
+        return view('cuentas.movimientos', [
+            'movimientos' => $movimientos,
+            'cuenta' => $cuenta,
+        ]);
     }
 }

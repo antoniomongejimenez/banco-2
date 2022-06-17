@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CuentaController;
+use App\Http\Controllers\MovimientoController;
+use App\Models\Movimiento;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +28,25 @@ Route::get('/dashboard', function () {
 Route::resource('clientes', ClienteController::class);
 
 Route::resource('cuentas', CuentaController::class);
+
+Route::resource('movimientos', MovimientoController::class);
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/cuentas/{cuenta}/titular', [CuentaController::class, 'titular'])
+    ->name('cuentas.titulares');
+
+    Route::get('/cuentas/{cuenta}/addtitular', [CuentaController::class, 'addtitular'])
+    ->name('cuentas.addtitular');
+
+    Route::put('/cuentas/{cuenta}', [CuentaController::class, 'addtitularmeter'])
+    ->name('cuentas.addtitular.meter');
+
+    Route::post('/cuentas/{cuenta}/quitar/clientes/{cliente}', [CuentaController::class, 'quitartitular'])
+    ->name('cuentas.quitartitular');
+
+    Route::get('/cuentas/{cuenta}/movimientos', [CuentaController::class, 'movimientos'])
+    ->name('cuentas.movimientos');
+});
 
 require __DIR__.'/auth.php';
